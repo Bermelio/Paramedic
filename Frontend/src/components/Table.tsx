@@ -1,103 +1,38 @@
-
 function Table() {
-    return (
-        <>
-            <div className="flex justify-center items-center p-4 m-4">
-                <div className="table-auto md:table-fixed">
-                    <thead className="bg-amber-600 text-white">
-                        <tr>
-                            <th className="p-2">N°</th>
-                            <th className="p-2">CLUB LOCAL</th>
-                            <th className="p-2">PARAMÉDICO/A</th>
-                            <th className="p-2">CAMBIO DE CANCHA</th>
-                            <th className="p-2">HORA</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="text-center border border-black">01</td>
-                            <td className="text-center border border-black">Dep. Oeste</td>
-                            <td className="text-center border border-black">Ivana Brunetto</td>
-                            <td className="text-center border border-black">Los Andes</td>
-                            <td className="text-center border border-black">13:00</td>
-                        </tr>
-                    </tbody>
-                    <tbody>
-                        <tr>
-                            <td className="text-center border border-black">01</td>
-                            <td className="text-center border border-black">Dep. Oeste</td>
-                            <td className="text-center border border-black">Ivana Brunetto</td>
-                            <td className="text-center border border-black">Los Andes</td>
-                            <td className="text-center border border-black">13:00</td>
-                        </tr>
-                    </tbody>
-                    <tbody>
-                        <tr>
-                            <td className="text-center border border-black">01</td>
-                            <td className="text-center border border-black">Dep. Oeste</td>
-                            <td className="text-center border border-black">Ivana Brunetto</td>
-                            <td className="text-center border border-black">Los Andes</td>
-                            <td className="text-center border border-black">13:00</td>
-                        </tr>
-                    </tbody>
-                    <tbody>
-                        <tr>
-                            <td className="text-center border border-black">01</td>
-                            <td className="text-center border border-black">Dep. Oeste</td>
-                            <td className="text-center border border-black">Ivana Brunetto</td>
-                            <td className="text-center border border-black">Los Andes</td>
-                            <td className="text-center border border-black">13:00</td>
-                        </tr>
-                    </tbody>
-                    <tbody>
-                        <tr>
-                            <td className="text-center border border-black">01</td>
-                            <td className="text-center border border-black">Dep. Oeste</td>
-                            <td className="text-center border border-black">Ivana Brunetto</td>
-                            <td className="text-center border border-black">Los Andes</td>
-                            <td className="text-center border border-black">13:00</td>
-                        </tr>
-                    </tbody>
-                    <tbody>
-                        <tr>
-                            <td className="text-center border border-black">01</td>
-                            <td className="text-center border border-black">Dep. Oeste</td>
-                            <td className="text-center border border-black">Ivana Brunetto</td>
-                            <td className="text-center border border-black">Los Andes</td>
-                            <td className="text-center border border-black">13:00</td>
-                        </tr>
-                    </tbody>
-                    <tbody>
-                        <tr>
-                            <td className="text-center border border-black">01</td>
-                            <td className="text-center border border-black">Dep. Oeste</td>
-                            <td className="text-center border border-black">Ivana Brunetto</td>
-                            <td className="text-center border border-black">Los Andes</td>
-                            <td className="text-center border border-black">13:00</td>
-                        </tr>
-                    </tbody>
-                    <tbody>
-                        <tr>
-                            <td className="text-center border border-black">01</td>
-                            <td className="text-center border border-black">Dep. Oeste</td>
-                            <td className="text-center border border-black">Ivana Brunetto</td>
-                            <td className="text-center border border-black">Los Andes</td>
-                            <td className="text-center border border-black">13:00</td>
-                        </tr>
-                    </tbody>
-                    <tbody>
-                        <tr>
-                            <td className="text-center border border-black">01</td>
-                            <td className="text-center border border-black">Dep. Oeste</td>
-                            <td className="text-center border border-black">Ivana Brunetto</td>
-                            <td className="text-center border border-black">Los Andes</td>
-                            <td className="text-center border border-black">13:00</td>
-                        </tr>
-                    </tbody>
-                </div>
-            </div>
-        </>
-    );
+  const rows = Array(9).fill({
+    number: "01",
+    club: "Dep. Oeste",
+    paramedico: "Ivana Brunetto",
+    cambio: "Los Andes",
+    hora: "13:00"
+  });
+
+  return (
+    <div className="flex justify-center items-center p-8">
+      <table className="table-auto md:w-2/3 border border-black">
+        <thead className="bg-amber-600 text-white text-lg">
+          <tr>
+            <th className="p-2 border border-black">N°</th>
+            <th className="p-2 border border-black">CLUB LOCAL</th>
+            <th className="p-2 border border-black">PARAMÉDICO/A</th>
+            <th className="p-2 border border-black">CAMBIO DE CANCHA</th>
+            <th className="p-2 border border-black">HORA</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, index) => (
+            <tr key={index} className="text-lg">
+              <td className="text-center border border-black p-2">{row.number}</td>
+              <td className="text-center border border-black p-2">{row.club}</td>
+              <td className="text-center border border-black p-2">{row.paramedico}</td>
+              <td className="text-center border border-black p-2">{row.cambio}</td>
+              <td className="text-center border border-black p-2">{row.hora}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 export default Table;
