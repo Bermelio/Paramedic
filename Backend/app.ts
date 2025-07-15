@@ -13,11 +13,15 @@ app.use(cors());
 app.use(express.json());
 
 //routes
+import authHandler from './src/routes/auth.route';
 // import canchasHandler from './routes/canchas.route.ts';
-// import paramedicosHandler from './routes/paramedicos.route.ts';
+// import paramedicosHandler from '../routes/paramedicos.route.ts';
 
 // app.use('/api/canchas', canchasHandler);
 // app.use('/api/paramedicos', paramedicosHandler);
+app.use('/api/auth', authHandler);
+
+
 app.get('/', (req: Request, res: Response) => {
     res.send('API de Canchas y Paramédicos');
 });

@@ -2,7 +2,7 @@ function Table() {
   const rows = Array(9).fill({
     number: "01",
     club: "Dep. Oeste",
-    paramedico: "Ivana Brunetto",
+    paramedico: "Cristina Castillo",
     cambio: "Los Andes",
     hora: "13:00"
   });
