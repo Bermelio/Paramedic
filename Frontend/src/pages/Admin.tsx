@@ -1,9 +1,20 @@
+import { useNavigate } from 'react-router-dom';
+
 function Admin() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    navigate('/login');
+  };
+
   return (
-    <>
-      <h3>hola</h3>
-    </>
+    <div>
+      <h1>Panel de Administración</h1>
+      <button onClick={handleLogout} className="bg-red-500 text-white p-2">
+        Cerrar Sesión
+      </button>
+    </div>
   );
 }
-
 export default Admin;

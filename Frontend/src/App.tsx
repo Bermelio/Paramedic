@@ -5,6 +5,8 @@ import Table from './components/Table.tsx'
 import Torneo from './components/Torneo.tsx'
 import Login from './pages/Login.tsx'
 import { BrowserRouter, Routes, Route} from 'react-router-dom'
+import Admin from './pages/Admin.tsx'
+import { Navigate } from 'react-router-dom'
 
 function App() {
 
@@ -20,6 +22,16 @@ function App() {
           <Torneo />
         </>} />
         <Route path="/login" element={<Login />} />
+        <Route 
+            path="/admin" 
+            element={
+              localStorage.getItem('isAuthenticated') ? (
+                <Admin />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            } 
+          />
       </Routes>
       </BrowserRouter>
     </div>
