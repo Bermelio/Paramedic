@@ -4,6 +4,7 @@ function Admin() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    localStorage.setItem('isAuthenticated', 'false');
     localStorage.removeItem('isAuthenticated');
     navigate('/login');
   };

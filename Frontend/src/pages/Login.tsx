@@ -2,23 +2,34 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function Login() {
+function Login({ setIsAuthenticated }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mensaje, setMensaje] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-      setMensaje(data.message);
-      localStorage.setItem('isAuthenticated', 'true');
-      navigate('/admin');
-    } catch (error) {
-      setMensaje(error.response?.data?.message || 'Error al iniciar sesión');
-    }
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await axios.post(
+      'http://localhost:5000/api/auth/login',
+      { email, password },
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+
+    console.log("Respuesta completa:", response);
+
+    setMensaje(response.data.message || "Login exitoso");
+    localStorage.setItem('isAuthenticated', 'true');
+    setIsAuthenticated(true); // si usas este prop
+    navigate('/admin');
+
+  } catch (error) {
+    console.error("Error en login:", error);
+    setMensaje(error.response?.data?.message || 'Error al iniciar sesión');
+  }
+};
+
 
   return (
     <div className="flex justify-center items-center pt-40">

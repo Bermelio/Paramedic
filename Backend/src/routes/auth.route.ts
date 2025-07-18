@@ -18,23 +18,33 @@ interface UserResponse {
 }
 
 // Ruta de Login
-router.post('/login', async (req: Request<{}, {}, UserCredentials>, res: Response<UserResponse>): Promise<void> => {
+router.post('/login', async (req:Request , res: Response):Promise<void> =>  {
   const { email, password } = req.body;
+  console.log("Login recibido en backend:", { email, password });
 
   try {
     const admin = await Admin.findOne({ email });
+    console.log("Admin encontrado en DB:", admin);
 
     if (!admin) {
+      console.log("No se encontró usuario.");
       res.status(400).json({ message: 'Credenciales inválidas' });
       return;
     }
 
-    res.json({ 
-      message: 'Login exitoso', 
-      user: { email: admin.email } 
-    });
+    const isMatch = await bcrypt.compare(password, admin.password);
+    console.log("¿Contraseña coincide?:", isMatch);
+
+    if (!isMatch) {
+      console.log("Contraseña incorrecta.");
+      res.status(400).json({ message: 'Credenciales inválidas' });
+      return;
+    }
+
+    console.log("Login exitoso.");
+    res.json({ message: 'Login exitoso' });
   } catch (error) {
-    console.error("Error completo:", error);
+    console.error("Error completo en login:", error);
     res.status(500).json({ message: 'Error en el servidor' });
   }
 });
@@ -52,7 +62,7 @@ router.post('/register', async (req: Request<{}, {}, UserCredentials>, res: Resp
 
     const newUser = new Admin({ 
       email, 
-      password // sin hashear aquí
+      password
     });
     
     await newUser.save();
