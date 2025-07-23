@@ -19,9 +19,14 @@ app.use(cors({
 
 //routes
 import authHandler from './src/routes/auth.route';
+import paramedicosHandler from './src/routes/paramedicos.route';
+import canchasHandler from './src/routes/canchas.route';
 
 app.use('/api/auth', authHandler);
+app.use('/api/paramedicos', paramedicosHandler);
+app.use('/api/canchas', canchasHandler);
 
+// Main route
 app.get('/', (req: Request, res: Response) => {
     res.send('API de Canchas y Paramédicos');
 });

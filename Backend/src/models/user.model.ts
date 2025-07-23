@@ -13,16 +13,13 @@ const userSchema = new mongoose.Schema({
     required: true 
   }
 }, { 
-  collection: 'Admin',
-  timestamps: true 
+  collection: 'Admin'
 });
 
-// Middleware de hasheo MEJORADO
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   
   try {
-    // ¡Generamos el hash de forma explícita!
     const hash = await bcrypt.hash(this.password, 10);
     this.password = hash;
     next();
