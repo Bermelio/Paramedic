@@ -21,7 +21,7 @@ function Login({ setIsAuthenticated }) {
 
     setMensaje(response.data.message || "Login exitoso");
     localStorage.setItem('isAuthenticated', 'true');
-    setIsAuthenticated(true); // si usas este prop
+    setIsAuthenticated(true);
     navigate('/admin');
 
   } catch (error) {

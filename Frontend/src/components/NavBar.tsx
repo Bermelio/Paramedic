@@ -5,8 +5,9 @@ function NavBar() {
   return (
     <>
       <div className="flex justify-around items-center gap-10 bg-amber-600 text-white p-4 shadow-lg">
-
-      <img className="size-20" src="/icon.png" alt="icon main" />
+      <a href="/admin">
+        <img className="size-20" src="/icon.png" alt="icon main" />
+      </a>
       <a href="/">
         <h1 className="text-5xl">Torneo: “Clausura 2025”</h1>
       </a>
