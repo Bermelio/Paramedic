@@ -80,7 +80,7 @@ function NavBar() {
         </button>
       </div>
 
-      <div className="flex justify-center sm:justify-end p-2 sm:p-3 sm:mr-4 lg:mr-10 text-sm sm:text-lg lg:text-lg">
+      <div className="flex justify-center sm:justify-end p-2 sm:p-3 sm:mr-4 lg:mr-10">
         <Clock/>
       </div>
     </>
