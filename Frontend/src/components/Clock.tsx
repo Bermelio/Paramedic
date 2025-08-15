@@ -22,12 +22,11 @@ function Clock() {
 
   return (
     <>
-      <div className="flex justify-end items-center gap-2 text-gray-700">
+      <div className="flex justify-end items-center gap-2 text-gray-700 text-xs sm:text-base lg:text-lg">
         <strong>San Francisco</strong>
         <p>{formattedDate} - {formattedTime}</p>
       </div>
     </>
-
   );
 }
 

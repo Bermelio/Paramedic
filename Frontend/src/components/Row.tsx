@@ -89,17 +89,6 @@ function Row() {
           <h2 className="font-bold mb-2">Fila {index + 1}</h2>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Seleccionar paramédico:</label>
-            <Select
-              options={paramedicos}
-              value={fila.paramedico}
-              onChange={(value) => handleChange(index, 'paramedico', value)}
-              isClearable
-              placeholder="Paramédico..."
-            />
-          </div>
-
-          <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Seleccionar cancha:</label>
             <Select
               options={canchas}
@@ -107,6 +96,17 @@ function Row() {
               onChange={(value) => handleChange(index, 'cancha', value)}
               isClearable
               placeholder="Cancha..."
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Seleccionar paramédico:</label>
+            <Select
+              options={paramedicos}
+              value={fila.paramedico}
+              onChange={(value) => handleChange(index, 'paramedico', value)}
+              isClearable
+              placeholder="Paramédico..."
             />
           </div>
 

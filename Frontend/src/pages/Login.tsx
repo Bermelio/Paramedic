@@ -2,34 +2,39 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function Login({ setIsAuthenticated }) {
+interface LoginProps {
+  setIsAuthenticated: (auth: boolean) => void;
+}
+
+function Login({ setIsAuthenticated }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mensaje, setMensaje] = useState('');
   const navigate = useNavigate();
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await axios.post(
-      'http://localhost:5000/api/auth/login',
-      { email, password },
-      { headers: { 'Content-Type': 'application/json' } }
-    );
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        'http://localhost:5000/api/auth/login',
+        { email, password },
+        { 
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+        }
+      );
 
-    console.log("Respuesta completa:", response);
+      console.log("Respuesta completa:", response);
 
-    setMensaje(response.data.message || "Login exitoso");
-    localStorage.setItem('isAuthenticated', 'true');
-    setIsAuthenticated(true);
-    navigate('/admin');
+      setMensaje(response.data.message || "Login exitoso");
+      setIsAuthenticated(true);
+      navigate('/admin');
 
-  } catch (error) {
-    console.error("Error en login:", error);
-    setMensaje(error.response?.data?.message || 'Error al iniciar sesión');
-  }
-};
-
+    } catch (error: any) {
+      console.error("Error en login:", error);
+      setMensaje(error.response?.data?.message || 'Error al iniciar sesión');
+    }
+  };
 
   return (
     <div className="flex justify-center items-center pt-40">
