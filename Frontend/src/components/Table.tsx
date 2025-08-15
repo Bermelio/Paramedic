@@ -59,7 +59,6 @@ function Table() {
 
   return (
     <div className="p-2 sm:p-4 lg:p-8">
-      {/* Tabla para escritorio */}
       <div className="hidden md:flex md:justify-center">
         <div className="w-full max-w-6xl overflow-x-auto">
           <table className="w-full border border-black">
