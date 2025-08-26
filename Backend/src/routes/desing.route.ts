@@ -5,37 +5,34 @@ import Canchas from '../models/canchas.model';
 
 const router = express.Router();
 
-// POST - Guardar datos (LIMPIAR ANTES DE INSERTAR)
 router.post('/', async (req, res) => {
   try {
     console.log('Datos recibidos:', req.body);
     
-    // IMPORTANTE: Limpiar todos los datos anteriores antes de insertar nuevos
     await Desing.deleteMany({});
     console.log('Datos anteriores eliminados');
     
     const nuevoDesing = await Desing.insertMany(req.body);
     console.log('Nuevos datos guardados:', nuevoDesing.length, 'registros');
     res.status(201).json(nuevoDesing);
+    return;
   } catch (error) {
     console.error('Error al guardar desing:', error);
     res.status(500).json({ error: 'Error al guardar el desing' });
+    return;
   }
 });
 
-// GET - Obtener datos CON NOMBRES REALES
 router.get('/', async (req, res) => {
   try {
     const designs = await Desing.find({});
     
-    // Para cada design, obtenemos los datos completos con nombres
     const designsConDatos = await Promise.all(
       designs.map(async (design: any, index: number) => {
         let paramedicoNombre = '-';
         let canchaNombre = '-';
         let cambioNombre = '-';
 
-        // Obtener nombre del paramédico si no es "-"
         if (design.paramedicoId !== '-') {
           try {
             const paramedico = await Paramedicos.findById(design.paramedicoId);
@@ -46,7 +43,6 @@ router.get('/', async (req, res) => {
           }
         }
 
-        // Obtener nombre de la cancha si no es "-"
         if (design.canchaId !== '-') {
           try {
             const cancha = await Canchas.findById(design.canchaId);
@@ -57,7 +53,6 @@ router.get('/', async (req, res) => {
           }
         }
 
-        // Obtener nombre del cambio de cancha si no es "-"
         if (design.cambioId !== '-') {
           try {
             const cambio = await Canchas.findById(design.cambioId);

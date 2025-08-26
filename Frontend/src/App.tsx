@@ -1,7 +1,7 @@
 import './App.css';
 import NavBar from './components/NavBar.tsx';
 import Header from './components/Header.tsx';
-import Table from './components/Table.tsx';
+import Table from './pages/Table.tsx';
 import Torneo from './components/Torneo.tsx';
 import Login from './pages/Login.tsx';
 import Admin from './pages/Admin.tsx';

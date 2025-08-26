@@ -10,27 +10,38 @@ interface TableRow {
   hora: string;
 }
 
-function Table() {
+function MainTable() {
   const [rows, setRows] = useState<TableRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchRows = async (isInitialLoad = true) => {
       try {
-        setLoading(true);
+        if (isInitialLoad) {
+          setLoading(true);
+        }
+
         const response = await axios.get('/api/desing');
         setRows(response.data);
         setError(null);
       } catch (err) {
-        console.error('Error al cargar datos:', err);
-        setError('Error al cargar los datos de la tabla');
+        console.error('Error al cargar datos de la tabla principal:', err);
+        if (isInitialLoad) {
+          setError('Error al cargar los datos de la tabla');
+        }
       } finally {
-        setLoading(false);
+        if (isInitialLoad) {
+          setLoading(false);
+        }
       }
     };
 
-    fetchData();
+    fetchRows(true);
+    const interval = setInterval(() => {
+      fetchRows(false);
+    }, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -58,7 +69,8 @@ function Table() {
   }
 
   return (
-    <div className="p-2 sm:p-4 lg:p-8">
+    <>
+      {/* Desktop */}
       <div className="hidden md:flex md:justify-center">
         <div className="w-full max-w-6xl overflow-x-auto">
           <table className="w-full border border-black">
@@ -101,6 +113,7 @@ function Table() {
         </div>
       </div>
 
+      {/* Vista móvil */}
       <div className="md:hidden space-y-4">
         <div className="bg-amber-600 text-white text-center py-3 px-4 rounded shadow-md">
           <h2 className="text-lg font-bold">Información de Partidos</h2>
@@ -154,8 +167,8 @@ function Table() {
           );
         })}
       </div>
-    </div>
+    </>
   );
 }
 
-export default Table;
+export default MainTable;

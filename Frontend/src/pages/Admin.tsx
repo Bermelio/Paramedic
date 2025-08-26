@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Row from '../components/row.tsx';
+import Row from '../components/Row.tsx';
+import Campeonato from '../components/CampeonatoAdmin.tsx';
 
 function Admin() {
   const navigate = useNavigate();
@@ -32,9 +33,10 @@ function Admin() {
 
         <Row/>
 
-        {/* agregar opcion de campeonato */}
+        <Campeonato />
         
       </div>
+
     </>
   );
 }

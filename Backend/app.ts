@@ -20,11 +20,13 @@ import authHandler from './src/routes/auth.route';
 import paramedicosHandler from './src/routes/paramedicos.route';
 import canchasHandler from './src/routes/canchas.route';
 import desingHandler from './src/routes/desing.route';
+import campeonatoHandler from './src/routes/campeonato.route';
 
 app.use('/api/auth', authHandler);
 app.use('/api/paramedicos', paramedicosHandler);
 app.use('/api/canchas', canchasHandler);
 app.use('/api/desing', desingHandler);
+app.use('/api/campeonato', campeonatoHandler);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('API de Canchas y Paramédicos');
