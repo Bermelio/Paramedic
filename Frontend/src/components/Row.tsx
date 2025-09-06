@@ -83,52 +83,62 @@ function Row() {
           Configura las 10 filas de la tabla. Al guardar, se reemplazarán todos los datos anteriores.
         </p>
       </div>
+      <div className="max-w-6xl mx-auto mb-10">
+        <div className="flex flex-col justify-center md:flex-row flex-wrap gap-4">
+          {selecciones.map((fila, index) => (
+            <div
+              key={index}
+              className="border border-gray-300 p-4 rounded md:max-w-xs md:w-full flex-shrink-0"
+            >
+              <h2 className="font-bold mb-2">{index === 9 ? "Cancha libre" : `Fila ${index+1}`}</h2>
 
-      {selecciones.map((fila, index) => (
-        <div key={index} className="mb-6 border border-gray-300 p-4 rounded">
-          <h2 className="font-bold mb-2">Fila {index + 1}</h2>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-1">Seleccionar cancha:</label>
+                <Select
+                  options={canchas}
+                  value={fila.cancha}
+                  onChange={(value) => handleChange(index, 'cancha', value)}
+                  isClearable
+                  placeholder="Cancha..."
+                  className="w-full"
+                />
+              </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Seleccionar cancha:</label>
-            <Select
-              options={canchas}
-              value={fila.cancha}
-              onChange={(value) => handleChange(index, 'cancha', value)}
-              isClearable
-              placeholder="Cancha..."
-            />
-          </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-1">Seleccionar paramédico:</label>
+                <Select
+                  options={paramedicos}
+                  value={fila.paramedico}
+                  onChange={(value) => handleChange(index, 'paramedico', value)}
+                  isClearable
+                  placeholder="Paramédico..."
+                  className="w-full"
+                />
+              </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Seleccionar paramédico:</label>
-            <Select
-              options={paramedicos}
-              value={fila.paramedico}
-              onChange={(value) => handleChange(index, 'paramedico', value)}
-              isClearable
-              placeholder="Paramédico..."
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Cambio de cancha:</label>
-            <Select
-              options={canchas}
-              value={fila.cambio}
-              onChange={(value) => handleChange(index, 'cambio', value)}
-              isClearable
-              placeholder="Cambio..."
-            />
-          </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-1">Cambio de cancha:</label>
+                <Select
+                  options={canchas}
+                  value={fila.cambio}
+                  onChange={(value) => handleChange(index, 'cambio', value)}
+                  isClearable
+                  placeholder="Cambio..."
+                  className="w-full"
+                />
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
-
       <button
         onClick={handleGuardar}
-        className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded mt-4 font-medium transition-colors"
+        className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded m-6 font-medium transition-colors max-w-xs w-full mx-auto justify-center flex items-center gap-2 "
       >
         💾 Guardar
       </button>
+      </div>
+
+
     </>
   );
 }

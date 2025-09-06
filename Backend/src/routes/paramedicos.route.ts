@@ -15,6 +15,12 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
+    if (Array.isArray(req.body)) {
+      const paramedicos = await Paramedicos.insertMany(req.body);
+      res.status(201).json(paramedicos);
+      return;
+    }
+
     const { fullname } = req.body;
     const newParamedico = new Paramedicos({ fullname });
     await newParamedico.save();

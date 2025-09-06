@@ -169,4 +169,36 @@ router.get("/all", async (req: Request, res: Response): Promise<void> => {
   }
 });
 
+// --- SSE ---
+router.get("/stream", async (req: Request, res: Response) => {
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+  res.flushHeaders?.(); 
+
+  const send = (data: any) => {
+    res.write(`data: ${JSON.stringify(data)}\n\n`);
+  };
+
+  const campeonato = await Campeonato.findOne({ habilitado: true })
+    .sort({ updatedAt: -1 })
+    .lean();
+  send(campeonato || { habilitado: false });
+
+  const changeStream = Campeonato.watch();
+
+  changeStream.on("change", async () => {
+    const actualizado = await Campeonato.findOne({ habilitado: true })
+      .sort({ updatedAt: -1 })
+      .lean();
+    send(actualizado || { habilitado: false });
+  });
+
+  req.on("close", () => {
+    changeStream.close();
+    res.end();
+  });
+});
+
+
 export default router;

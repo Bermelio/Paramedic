@@ -15,6 +15,12 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
+    if (Array.isArray(req.body)) {
+      const canchas = await Canchas.insertMany(req.body);
+      res.status(201).json(canchas);
+      return;
+    }
+
     const { name } = req.body;
     const newCancha = new Canchas({ name });
     await newCancha.save();

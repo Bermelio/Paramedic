@@ -17,36 +17,25 @@ function CampeonatoTable() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCampeonato = async (isInitialLoad = true) => {
-      try {
-        if (isInitialLoad) {
-          setLoading(true);
-        }
+  const evtSource = new EventSource('/api/campeonato/stream');
 
-        const response = await axios.get('/api/campeonato');
-        if (response.data && response.data.habilitado) {
-          setCampeonato(response.data);
-        } else {
-          setCampeonato(null);
-        }
-      } catch (error) {
-        console.log('No hay datos de campeonato o no está habilitado');
-        setCampeonato(null);
-      } finally {
-        if (isInitialLoad) {
-          setLoading(false);
-        }
-      }
-    };
+  evtSource.onmessage = (e) => {
+    const data: CampeonatoData = JSON.parse(e.data);
+    if (data?.habilitado) {
+      setCampeonato(data);
+    } else {
+      setCampeonato(null);
+    }
+    setLoading(false);
+  };
 
-    fetchCampeonato(true);
+  evtSource.onerror = () => {
+    console.error("Error SSE, cerrando conexión");
+    evtSource.close();
+  };
 
-    const interval = setInterval(() => {
-      fetchCampeonato(false); 
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, []);
+  return () => evtSource.close();
+}, []);
 
   if (loading) {
     return (
