@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Row from '../components/Row.tsx';
 import Campeonato from '../components/CampeonatoAdmin.tsx';
+import HeaderFecha from '../components/HeaderFecha.tsx'
 
 function Admin() {
   const navigate = useNavigate();
@@ -26,15 +27,16 @@ function Admin() {
       <div className='flex justify-end pr-12'>
         <button onClick={handleLogout} className="bg-red-500 text-white p-2 rounded">
           Cerrar Sesión
-        </button>
+          </button>
       </div>
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-2 pl-5">Panel de Administración</h1>
+        
+        <HeaderFecha/>
 
         <Row/>
-        <div className="mt-10">
-          <Campeonato />
-        </div>
+
+        <Campeonato />
         
       </div>
 

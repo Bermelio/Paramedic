@@ -77,12 +77,12 @@ function Row() {
 
   return (
     <>
-      <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded">
+      {/* <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded">
         <h3 className="font-bold text-blue-800 mb-2">📋 Configuración de Paramédicos</h3>
         <p className="text-blue-700 text-sm">
           Configura las 10 filas de la tabla. Al guardar, se reemplazarán todos los datos anteriores.
         </p>
-      </div>
+      </div> */}
       <div className="max-w-6xl mx-auto mb-10">
         <div className="flex flex-col justify-center md:flex-row flex-wrap gap-4">
           {selecciones.map((fila, index) => (

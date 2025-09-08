@@ -34,7 +34,7 @@ router.get("/", async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     console.error("Error al obtener campeonato:", error);
     res.status(500).json({
-      message: "Error interno del servidor",
+      message: "Server errorr",
       error: error instanceof Error ? error.message : "Error desconocido",
     });
   }
@@ -47,7 +47,7 @@ router.post("/", async (req: Request<{}, {}, CampeonatoBody>, res: Response): Pr
     if (!torneo || !club || !categoria || !partidos || !hora) {
       res.status(400).json({
         message: "Todos los campos son requeridos",
-        required: ["torneo", "club", "categoria", "partidos", "hora"],
+        required: ["torneo", "club", "categoria", "partidos", "hora"]
       });
       return;
     }
@@ -70,13 +70,13 @@ router.post("/", async (req: Request<{}, {}, CampeonatoBody>, res: Response): Pr
 
     res.status(201).json({
       message: "Campeonato guardado exitosamente",
-      data: campeonatoGuardado,
+      data: campeonatoGuardado
     });
   } catch (error) {
     console.error("Error al guardar campeonato:", error);
     res.status(500).json({
       message: "Error interno del servidor",
-      error: error instanceof Error ? error.message : "Error desconocido",
+      error: error instanceof Error ? error.message : "Error desconocido"
     });
   }
 });
@@ -127,7 +127,7 @@ router.delete("/:id", async (req: Request<{ id: string }>, res: Response): Promi
     const { id } = req.params;
 
     if (!isValidObjectId(id)) {
-      res.status(400).json({ message: "ID de campeonato inválido" });
+      res.status(400).json({ message: "ID invalido" });
       return;
     }
 
