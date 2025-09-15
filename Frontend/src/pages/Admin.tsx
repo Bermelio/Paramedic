@@ -32,7 +32,7 @@ function Admin() {
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-2 pl-5">Panel de Administración</h1>
         
-        <HeaderFecha/>
+        <HeaderFecha />
 
         <Row/>
 

@@ -32,7 +32,7 @@ function Row() {
         }));
         setCanchas(canchasMapped);
 
-        const guionCancha = canchasMapped.find((c) => c.label === '-') || null;
+        const guionCancha = canchasMapped.find((c: { label: string; }) => c.label === '-') || null;
         const filasConGuion = Array(10).fill(null).map(() => ({
           paramedico: null,
           cancha: null,
