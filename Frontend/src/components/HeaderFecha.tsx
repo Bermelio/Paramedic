@@ -49,10 +49,14 @@ function HeaderFecha (){
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500" 
           />
         </div>
-        <button className="bg-amber-500 hover:bg-amber-600 text-white py-3 rounded font-medium transition-colors max-w-xs justify-center flex items-center gap-2 "
-        onClick={handleClick}>
-        ✔
+        <div className="flex items-end justify-center align-middle ">
+        <button
+          className="bg-green-600 hover:bg-green-700 rounded align-middle flex items-center justify-center text-2xl shadow-md hover:shadow-lg transition-all duration-200 w-20 h-12"
+          onClick={handleClick}
+        >
+          ✔
         </button>
+        </div>
       </div>
     </div>
   </div>

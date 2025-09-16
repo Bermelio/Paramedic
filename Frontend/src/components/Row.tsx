@@ -104,29 +104,33 @@ function Row() {
                 />
               </div>
 
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Seleccionar paramédico:</label>
-                <Select
-                  options={paramedicos}
-                  value={fila.paramedico}
-                  onChange={(value) => handleChange(index, 'paramedico', value)}
-                  isClearable
-                  placeholder="Paramédico..."
-                  className="w-full"
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Cambio de cancha:</label>
-                <Select
-                  options={canchas}
-                  value={fila.cambio}
-                  onChange={(value) => handleChange(index, 'cambio', value)}
-                  isClearable
-                  placeholder="Cambio..."
-                  className="w-full"
-                />
-              </div>
+              {index !== 9 && (
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1">
+                    Seleccionar paramédico:
+                  </label>
+                  <Select
+                    options={paramedicos}
+                    value={fila.paramedico}
+                    onChange={(value) => handleChange(index, "paramedico", value)}
+                    isClearable
+                    placeholder="Paramédico..."
+                    className="w-full"
+                  />
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium mb-1">Cambio de cancha:</label>
+                    <Select
+                      options={canchas}
+                      value={fila.cambio}
+                      onChange={(value) => handleChange(index, 'cambio', value)}
+                      isClearable
+                      placeholder="Cambio..."
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+              )}
+              
             </div>
           ))}
         </div>
