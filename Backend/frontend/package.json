@@ -4,10 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "build": "tsc && cd ../frontend && npm install && npm run build && cd ../backend",
+    "start": "node dist/app.js",
+    "dev": "ts-node-dev --respawn --transpile-only app.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.10",

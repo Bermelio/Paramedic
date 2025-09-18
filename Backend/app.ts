@@ -18,7 +18,7 @@ app.use(
   cors({
     origin:
       NODE_ENV === 'production'
-        ? process.env.FRONTEND_URL || 'https://tu-app.onrender.com'
+        ? process.env.FRONTEND_URL || 'https://paramedic-rbfh.onrender.com'
         : 'http://localhost:5173',
     credentials: true,
   })
@@ -38,7 +38,7 @@ app.use('/api/desing', desingHandler);
 app.use('/api/campeonato', campeonatoHandler);
 app.use('/api/header', headerHandler);
 
-const frontendPath = path.join(__dirname, 'frontend-dist');
+const frontendPath = path.join(__dirname, '../frontend/dist');
 
 if (fs.existsSync(frontendPath)) {
   console.log('✅ Frontend encontrado, sirviendo archivos estáticos');
@@ -105,4 +105,4 @@ mongoose
   .catch((err) => {
     console.error('❌ Error conectando a MongoDB:', err.message);
     process.exit(1);
-});
+  });
