@@ -49,7 +49,6 @@ app.use((req: Request, res: Response) => {
 });
 
 
-
 app.use((req: Request, res: Response) => {
   if (req.path.startsWith('/api/')) {
     res.status(404).json({ message: '❌ API endpoint not found' });
