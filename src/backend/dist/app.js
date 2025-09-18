@@ -9,6 +9,7 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 5000;
@@ -17,7 +18,7 @@ app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
     origin: NODE_ENV === 'production'
-        ? process.env.FRONTEND_URL || 'https://tu-app.onrender.com'
+        ? process.env.FRONTEND_URL || 'https://paramedic-rbfh.onrender.com'
         : 'http://localhost:5173',
     credentials: true,
 }));
@@ -33,21 +34,41 @@ app.use('/api/canchas', canchas_route_1.default);
 app.use('/api/desing', desing_route_1.default);
 app.use('/api/campeonato', campeonato_route_1.default);
 app.use('/api/header', header_route_1.default);
-app.use(express_1.default.static(path_1.default.join(__dirname, '../../frontend/dist')));
-app.use((req, res) => {
-    if (req.path.startsWith('/api/')) {
-        res.status(404).json({ message: 'API endpoint not found' });
-        return;
-    }
-    res.sendFile(path_1.default.join(__dirname, '../../frontend/dist/index.html'));
-});
-app.use((req, res) => {
-    if (req.path.startsWith('/api/')) {
-        res.status(404).json({ message: '❌ API endpoint not found' });
-        return;
-    }
-    res.sendFile(path_1.default.join(__dirname, '../frontend/dist/index.html'));
-});
+const frontendPath = path_1.default.join(__dirname, '../frontend/dist');
+if (fs_1.default.existsSync(frontendPath)) {
+    console.log('✅ Frontend encontrado, sirviendo archivos estáticos');
+    app.use(express_1.default.static(frontendPath));
+    app.get('*', (req, res) => {
+        if (req.path.startsWith('/api/')) {
+            res.status(404).json({ message: '❌ API endpoint not found' });
+            return;
+        }
+        res.sendFile(path_1.default.join(frontendPath, 'index.html'));
+    });
+}
+else {
+    console.log('⚠️ Frontend no encontrado, sirviendo solo API');
+    app.get('/', (req, res) => {
+        res.json({
+            message: '🚀 API funcionando correctamente',
+            endpoints: [
+                '/api/auth',
+                '/api/paramedicos',
+                '/api/canchas',
+                '/api/desing',
+                '/api/campeonato',
+                '/api/header'
+            ]
+        });
+    });
+    app.get('*', (req, res) => {
+        if (req.path.startsWith('/api/')) {
+            res.status(404).json({ message: '❌ API endpoint not found' });
+            return;
+        }
+        res.status(404).json({ message: '❌ Frontend no disponible' });
+    });
+}
 app.use((err, req, res, _next) => {
     console.error('🔥 Error inesperado:', err.message);
     res.status(500).json({ message: 'Error interno del servidor' });
