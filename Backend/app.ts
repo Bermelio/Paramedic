@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import path from 'path';
+import fs from 'fs';
 
 dotenv.config();
 
@@ -37,25 +38,44 @@ app.use('/api/desing', desingHandler);
 app.use('/api/campeonato', campeonatoHandler);
 app.use('/api/header', headerHandler);
 
+const frontendPath = path.join(__dirname, 'frontend-dist');
 
-app.use(express.static(path.join(__dirname, 'frontend/dist')));
-
-app.use((req: Request, res: Response) => {
-  if (req.path.startsWith('/api/')) {
-    res.status(404).json({ message: 'API endpoint not found' });
-    return;
-  }
-  res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
-});
-
-
-app.use((req: Request, res: Response) => {
-  if (req.path.startsWith('/api/')) {
-    res.status(404).json({ message: '❌ API endpoint not found' });
-    return;
-  }
-  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-});
+if (fs.existsSync(frontendPath)) {
+  console.log('✅ Frontend encontrado, sirviendo archivos estáticos');
+  app.use(express.static(frontendPath));
+  
+  app.get('*', (req: Request, res: Response) => {
+    if (req.path.startsWith('/api/')) {
+      res.status(404).json({ message: '❌ API endpoint not found' });
+      return;
+    }
+    res.sendFile(path.join(frontendPath, 'index.html'));
+  });
+} else {
+  console.log('⚠️ Frontend no encontrado, sirviendo solo API');
+  
+  app.get('/', (req: Request, res: Response) => {
+    res.json({ 
+      message: '🚀 API funcionando correctamente',
+      endpoints: [
+        '/api/auth',
+        '/api/paramedicos',
+        '/api/canchas',
+        '/api/desing',
+        '/api/campeonato',
+        '/api/header'
+      ]
+    });
+  });
+  
+  app.get('*', (req: Request, res: Response) => {
+    if (req.path.startsWith('/api/')) {
+      res.status(404).json({ message: '❌ API endpoint not found' });
+      return;
+    }
+    res.status(404).json({ message: '❌ Frontend no disponible' });
+  });
+}
 
 app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
   console.error('🔥 Error inesperado:', err.message);
@@ -85,4 +105,4 @@ mongoose
   .catch((err) => {
     console.error('❌ Error conectando a MongoDB:', err.message);
     process.exit(1);
-  });
+});
