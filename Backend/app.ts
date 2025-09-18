@@ -38,15 +38,16 @@ app.use('/api/campeonato', campeonatoHandler);
 app.use('/api/header', headerHandler);
 
 
-app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+app.use(express.static(path.join(__dirname, 'frontend/dist')));
 
 app.use((req: Request, res: Response) => {
   if (req.path.startsWith('/api/')) {
     res.status(404).json({ message: 'API endpoint not found' });
     return;
   }
-  res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
+  res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
 });
+
 
 
 app.use((req: Request, res: Response) => {
