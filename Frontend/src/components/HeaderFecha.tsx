@@ -76,6 +76,7 @@ function HeaderFecha() {
       if (headerData._id) {
         const response = await axios.put<CreateUpdateResponse>(`/api/header/${headerData._id}`, dataToSave);
         alert("Datos actualizados correctamente");
+        window.location.reload();
       } else {
         const response = await axios.post<CreateUpdateResponse>('/api/header', dataToSave);
         alert("Datos guardados correctamente");
@@ -147,5 +148,4 @@ function HeaderFecha() {
 
 export default HeaderFecha;
 
-
-
+//refactor u too

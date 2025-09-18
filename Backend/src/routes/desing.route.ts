@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
   try {
-    console.log('Datos recibidos:', req.body);
+    console.log('Datos recibidos en el backend:', req.body);
     
     await Desing.deleteMany({});
     console.log('Datos anteriores eliminados');
@@ -25,6 +25,7 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
+
     const designs = await Desing.find({});
     
     const designsConDatos = await Promise.all(
@@ -69,8 +70,9 @@ router.get('/', async (req, res) => {
           club: canchaNombre,
           paramedico: paramedicoNombre,
           cambio: cambioNombre,
-          hora: '13:00'
+          hora: design.hora ? String(design.hora) : '12:00'
         };
+
       })
     );
 

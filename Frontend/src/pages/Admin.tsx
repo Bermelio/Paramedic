@@ -25,13 +25,13 @@ function Admin() {
   return (
     <>
       <div className='flex justify-end pr-12'>
-        <button onClick={handleLogout} className="bg-red-500 text-white p-2 rounded">
+        <button onClick={handleLogout} className="bg-red-500 text-white p-2 mt-2 rounded">
           Cerrar Sesión
           </button>
       </div>
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-2 pl-5">Panel de Administración</h1>
-        
+
         <HeaderFecha />
 
         <Row/>

@@ -2,26 +2,53 @@ import Select from 'react-select';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+axios.defaults.baseURL = 'http://localhost:5000';
+
 interface ParamedicoOption {
   value: string;
   label: string;
 }
+
 interface CanchaOption {
   value: string;
   label: string;
 }
 
+interface FilaSeleccion {
+  paramedico: ParamedicoOption | null;
+  cancha: CanchaOption | null;
+  cambio: CanchaOption | null;
+  hora: string;
+}
+
+interface HeaderResponse {
+  _id: string;
+  encuentro: string;
+  fecha: string;
+  hora: string;
+  nombreDia: string;
+}
+
 function Row() {
   const [paramedicos, setParamedicos] = useState<ParamedicoOption[]>([]);
   const [canchas, setCanchas] = useState<CanchaOption[]>([]);
-
-  const [selecciones, setSelecciones] = useState<
-    { paramedico: ParamedicoOption | null; cancha: CanchaOption | null; cambio: CanchaOption | null }[]
-  >(Array(10).fill({ paramedico: null, cancha: null, cambio: null }));
+  const [horaDefault, setHoraDefault] = useState<string>('13:00');
+  const [selecciones, setSelecciones] = useState<FilaSeleccion[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        let horaDelHeader = '13:00';
+        try {
+          const headerRes = await axios.get<HeaderResponse>('/api/header');
+          if (headerRes.data && headerRes.data.hora) {
+            horaDelHeader = headerRes.data.hora;
+          }
+        } catch (headerError) {
+          console.log('No se pudo obtener la hora del header, usando 13:00 por defecto');
+        }
+        setHoraDefault(horaDelHeader);
+
         const res1 = await axios.get('/api/paramedicos');
         setParamedicos(res1.data.map((p: any) => ({ value: p._id, label: p.fullname })));
 
@@ -32,13 +59,15 @@ function Row() {
         }));
         setCanchas(canchasMapped);
 
-        const guionCancha = canchasMapped.find((c: { label: string; }) => c.label === '-') || null;
-        const filasConGuion = Array(10).fill(null).map(() => ({
+        const guionCancha = canchasMapped.find((c: CanchaOption) => c.label === '-') || null;
+        const filasIniciales = Array(10).fill(null).map(() => ({
           paramedico: null,
           cancha: null,
           cambio: guionCancha,
+          hora: horaDelHeader 
         }));
-        setSelecciones(filasConGuion);
+        setSelecciones(filasIniciales);
+
       } catch (err) {
         console.error('Error al cargar datos:', err);
       }
@@ -47,9 +76,17 @@ function Row() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (selecciones.length > 0) {
+      setSelecciones(prevSelecciones => 
+        prevSelecciones.map(fila => ({ ...fila, hora: horaDefault }))
+      );
+    }
+  }, [horaDefault]);
+
   const handleChange = (
     index: number,
-    field: 'paramedico' | 'cancha' | 'cambio',
+    field: 'paramedico' | 'cancha' | 'cambio' | 'hora',
     value: any
   ) => {
     const nuevasSelecciones = [...selecciones];
@@ -60,9 +97,10 @@ function Row() {
   const handleGuardar = async () => {
     try {
       const datosAEnviar = selecciones.map((fila) => ({
-        paramedicoId: fila.paramedico?.value || '-',
-        canchaId: fila.cancha?.value || '-',
-        cambioId: fila.cambio?.value || '-',
+      paramedicoId: fila.paramedico?.value || '-',
+      canchaId: fila.cancha?.value || '-',
+      cambioId: fila.cambio?.value || '-',
+      hora: String(fila.hora) || horaDefault
       }));
 
       console.log('Enviando datos:', datosAEnviar);
@@ -77,13 +115,14 @@ function Row() {
 
   return (
     <>
-      {/* <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded">
-        <h3 className="font-bold text-blue-800 mb-2">📋 Configuración de Paramédicos</h3>
-        <p className="text-blue-700 text-sm">
-          Configura las 10 filas de la tabla. Al guardar, se reemplazarán todos los datos anteriores.
-        </p>
-      </div> */}
       <div className="max-w-6xl mx-auto mb-10">
+        {/* Info de la hora por defecto */}
+        <div className="mb-4 p-3 bg-blue-50 rounded-lg border text-center">
+          <p className="text-sm text-gray-700">
+            Las horas se configuran automáticamente con: <strong>{horaDefault}</strong>
+          </p>
+        </div>
+
         <div className="flex flex-col justify-center md:flex-row flex-wrap gap-4">
           {selecciones.map((fila, index) => (
             <div
@@ -105,20 +144,25 @@ function Row() {
               </div>
 
               {index !== 9 && (
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-1">
-                    Seleccionar paramédico:
-                  </label>
-                  <Select
-                    options={paramedicos}
-                    value={fila.paramedico}
-                    onChange={(value) => handleChange(index, "paramedico", value)}
-                    isClearable
-                    placeholder="Paramédico..."
-                    className="w-full"
-                  />
+                <>
+                  <div className='mb-4'>
+                    <label className="block text-sm font-medium mb-1">
+                      Seleccionar paramédico:
+                    </label>
+                    <Select
+                      options={paramedicos}
+                      value={fila.paramedico}
+                      onChange={(value) => handleChange(index, "paramedico", value)}
+                      isClearable
+                      placeholder="Paramédico..."
+                      className="w-full"
+                    />
+                  </div>
+                  
                   <div className="mb-4">
-                    <label className="block text-sm font-medium mb-1">Cambio de cancha:</label>
+                    <label className="block text-sm font-medium mb-1">
+                      Cambio de cancha:
+                    </label>
                     <Select
                       options={canchas}
                       value={fila.cambio}
@@ -128,21 +172,31 @@ function Row() {
                       className="w-full"
                     />
                   </div>
-                </div>
+                </>
               )}
-              
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-1">
+                  Hora: 
+                </label>
+                <input
+                  type="time"
+                  value={fila.hora}
+                  onChange={(e) => handleChange(index, 'hora', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                />
+              </div>
             </div>
           ))}
         </div>
-      <button
-        onClick={handleGuardar}
-        className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded m-6 font-medium transition-colors max-w-xs w-full mx-auto justify-center flex items-center gap-2 "
-      >
-        💾 Guardar
-      </button>
+        
+        <button
+          onClick={handleGuardar}
+          className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded m-6 font-medium transition-colors max-w-xs w-full mx-auto justify-center flex items-center gap-2"
+        >
+          💾 Guardar
+        </button>
       </div>
-
-
     </>
   );
 }

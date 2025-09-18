@@ -13,7 +13,6 @@ function Header() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Función para formatear la fecha a un formato más legible
   const formatearFecha = (fecha: string): string => {
     if (!fecha) return '';
     
@@ -27,7 +26,6 @@ function Header() {
     return fechaObj.toLocaleDateString('es-ES', opciones);
   };
 
-  // Función para formatear la hora
   const formatearHora = (hora: string): string => {
     if (!hora) return '';
     return `${hora} hs`;

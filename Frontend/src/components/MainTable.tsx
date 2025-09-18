@@ -8,12 +8,45 @@ interface TableRow {
   paramedico: string;
   cambio: string;
   hora: string;
+  changeNumber?: number;
 }
 
 function MainTable() {
   const [rows, setRows] = useState<TableRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+   const processRowsWithChangeNumbers = (originalRows: TableRow[]) => {
+    let changeCounter = 1;
+    
+    const horaCounts: { [key: string]: number } = {};
+    originalRows.forEach(row => {
+      if (row.hora && row.hora !== '-') {
+        horaCounts[row.hora] = (horaCounts[row.hora] || 0) + 1;
+      }
+    });
+    
+    const horaEstandar = Object.keys(horaCounts).reduce((a, b) => 
+      horaCounts[a] > horaCounts[b] ? a : b, Object.keys(horaCounts)[0] || '13:00'
+    );
+    
+    return originalRows.map(row => {
+      let shouldAssignNumber = false;
+      
+      if (row.cambio !== '-') {
+        shouldAssignNumber = true;
+      }
+      
+      if (row.hora && row.hora !== horaEstandar && row.hora !== '-') {
+        shouldAssignNumber = true;
+      }
+      
+      return {
+        ...row,
+        changeNumber: shouldAssignNumber ? changeCounter++ : undefined
+      };
+    });
+  };
 
   useEffect(() => {
     const fetchRows = async (isInitialLoad = true) => {
@@ -23,8 +56,10 @@ function MainTable() {
         }
 
         const response = await axios.get('/api/desing');
-        setRows(response.data);
+        const processedRows = processRowsWithChangeNumbers(response.data);
+        setRows(processedRows);
         setError(null);
+        console.log('Datos cargados en MainTable:', processedRows);
       } catch (err) {
         console.error('Error al cargar datos de la tabla principal:', err);
         if (isInitialLoad) {
@@ -40,9 +75,14 @@ function MainTable() {
     fetchRows(true);
     const interval = setInterval(() => {
       fetchRows(false);
-    }, 10000);
+    }, 100000);
     return () => clearInterval(interval);
   }, []);
+
+  const formatearHora = (hora: string): string => {
+    if (!hora) return '-';
+    return `${hora} hs`;
+  };
 
   if (loading) {
     return (
@@ -101,7 +141,14 @@ function MainTable() {
                 return (
                   <tr key={row._id} className="text-sm lg:text-lg">
                     <td className="text-center border border-black p-2 lg:p-3">{row.number}</td>
-                    <td className="text-center border border-black p-2 lg:p-3">{row.club}</td>
+                    <td className="text-center border border-black p-2 lg:p-3">
+                      {row.club}
+                      {row.changeNumber && (
+                        <span className="text-red-600 ml-1 font-bold">
+                          ({row.changeNumber})
+                        </span>
+                      )}
+                    </td>
                     <td className="text-center border border-black p-2 lg:p-3">{row.paramedico}</td>
                     <td className="text-center border border-black p-2 lg:p-3">{row.cambio}</td>
                     <td className="text-center border border-black p-2 lg:p-3">{row.hora}</td>
@@ -146,13 +193,20 @@ function MainTable() {
             >
               <div className="bg-amber-600 text-white px-4 py-2 flex justify-between items-center text-sm font-semibold">
                 <span>Cancha N° {row.number}</span>
-                <span>{row.hora}</span>
+                <span>{formatearHora(row.hora)}</span>
               </div>
 
               <div className="p-4 space-y-3 text-sm">
                 <div>
                   <span className="block text-gray-500 text-xs font-medium">CLUB LOCAL</span>
-                  <span className="text-gray-900">{row.club}</span>
+                  <span className="text-gray-900">
+                    {row.club}
+                    {row.changeNumber && (
+                      <span className="text-red-600 ml-1 font-bold">
+                        ({row.changeNumber})
+                      </span>
+                    )}
+                  </span>
                 </div>
                 <div>
                   <span className="block text-gray-500 text-xs font-medium">PARAMÉDICO/A</span>
@@ -172,3 +226,5 @@ function MainTable() {
 }
 
 export default MainTable;
+
+//refactor someday...
