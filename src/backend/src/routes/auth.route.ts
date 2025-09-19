@@ -17,12 +17,13 @@ interface UserResponse {
   };
 }
 
+const JWT_SECRET = process.env.JWT_SECRET || 'Sol_Secreto_Bunkker_minecraft201200302';
+
 router.post('/login', async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
   try {
     const admin = await Admin.findOne({ email });
-    console.log("Admin encontrado en DB:", admin);
 
     if (!admin) {
       res.status(400).json({ message: 'Credenciales inválidas' });
@@ -31,19 +32,15 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
     const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) {
-      console.log("Contraseña incorrecta.");
       res.status(400).json({ message: 'Credenciales inválidas' });
       return;
     }
 
-    const token = jwt.sign(
-      { 
-        userId: admin._id, 
-        email: admin.email 
-      },
-      process.env.JWT_SECRET || 'LeoMatioli2025',
-      { expiresIn: '15m' }
-    );
+  const token = jwt.sign(
+    { userId: admin._id, email: admin.email },
+    JWT_SECRET,
+    { expiresIn: '15m' }
+  );
 
     res.cookie('authToken', token, {
       httpOnly: true,
@@ -52,7 +49,6 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
       maxAge: 15 * 60 * 1000
     });
 
-    console.log("Login exitoso y token enviado.");
     res.json({ 
       message: 'Login exitoso',
       user: { email: admin.email }
@@ -77,7 +73,7 @@ router.get('/verify', (req: Request, res: Response): void => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "passtest") as any;
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
     res.json({
       authenticated: true,
       user: { 
@@ -86,7 +82,6 @@ router.get('/verify', (req: Request, res: Response): void => {
       }
     });
   } catch (error) {
-    console.log("Token inválido:", error);
     res.clearCookie('authToken');
     res.json({ authenticated: false });
   }
