@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Clock from "./Clock";
+import { API_BASE_URL } from "../adapter"
 
 function NavBar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -12,7 +13,7 @@ function NavBar() {
     const checkAuth = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:5000/api/auth/verify',
+          `${API_BASE_URL}/api/auth/verify`,
           { withCredentials: true }
         );
         setIsAuthenticated(response.data.authenticated);

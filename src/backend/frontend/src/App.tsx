@@ -8,6 +8,7 @@ import Admin from './pages/Admin.tsx';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from "./adapter.ts"
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,7 +18,7 @@ function App() {
     const checkAuth = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:5000/api/auth/verify',
+          `${API_BASE_URL}/api/auth/verify`,
           { withCredentials: true }
         );
         setIsAuthenticated(response.data.authenticated);

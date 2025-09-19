@@ -1,8 +1,9 @@
 import Select from 'react-select';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from "../adapter"
 
-axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.baseURL = API_BASE_URL;
 
 interface ParamedicoOption {
   value: string;
