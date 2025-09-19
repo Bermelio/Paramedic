@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && cd frontend && npm install && npm run build && cd ..",
+    "build": "npm install --include=dev && tsc && cd frontend && npm install && npm run build && cd ..",
     "start": "node dist/app.js",
     "dev": "ts-node-dev --respawn --transpile-only app.ts"
   },
