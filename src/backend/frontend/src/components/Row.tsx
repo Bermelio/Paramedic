@@ -61,7 +61,7 @@ function Row() {
         setCanchas(canchasMapped);
 
         const guionCancha = canchasMapped.find((c: CanchaOption) => c.label === '-') || null;
-        const filasIniciales = Array(10).fill(null).map(() => ({
+        const filasIniciales = Array(11).fill(null).map(() => ({
           paramedico: null,
           cancha: null,
           cambio: guionCancha,
