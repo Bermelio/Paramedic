@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from "../adapter"
 
 interface HeaderData {
   _id?: string;
@@ -35,7 +36,7 @@ function Header() {
     const fetchHeaderData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/header');
+        const response = await fetch(`${API_BASE_URL}/api/header`);
         
         if (!response.ok) {
           throw new Error('Data header no encontrada');

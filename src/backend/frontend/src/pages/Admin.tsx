@@ -3,6 +3,7 @@ import axios from 'axios';
 import Row from '../components/Row.tsx';
 import Campeonato from '../components/CampeonatoAdmin.tsx';
 import HeaderFecha from '../components/HeaderFecha.tsx'
+import { API_BASE_URL } from "../adapter"
 
 function Admin() {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ function Admin() {
   const handleLogout = async () => {
     try {
       await axios.post(
-        'http://localhost:5000/api/auth/logout',
+        `${API_BASE_URL}/api/auth/logout`,
         {},
         { withCredentials: true }
       );
