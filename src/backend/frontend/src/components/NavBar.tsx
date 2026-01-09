@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Clock from "./Clock";
-import { API_BASE_URL } from "../adapter"
 
 function NavBar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -13,7 +12,7 @@ function NavBar() {
     const checkAuth = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/api/auth/verify`,
+          'http://localhost:5000/api/auth/verify',
           { withCredentials: true }
         );
         setIsAuthenticated(response.data.authenticated);
@@ -54,7 +53,7 @@ function NavBar() {
         <div className="flex-1 text-center">
           <a href="/">
             <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
-              Torneo: "Clausura 2025"
+             Campeonato Nacional de Baby Fútbol · 49ª Edición
             </h1>
           </a>
         </div>
