@@ -61,7 +61,7 @@ function Row() {
         setCanchas(canchasMapped);
 
         const guionCancha = canchasMapped.find((c: CanchaOption) => c.label === '-') || null;
-        const filasIniciales = Array(11).fill(null).map(() => ({
+        const filasIniciales = Array(10).fill(null).map(() => ({
           paramedico: null,
           cancha: null,
           cambio: guionCancha,
@@ -130,7 +130,7 @@ function Row() {
               key={index}
               className="border border-gray-300 p-4 rounded md:max-w-xs md:w-full flex-shrink-0"
             >
-              <h2 className="font-bold mb-2">{index === 9 ? "Cancha libre" : `Fila ${index+1}`}</h2>
+              <h2 className="font-bold mb-2">{`Fila ${index+1}`}</h2>
 
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-1">Seleccionar cancha:</label>
@@ -144,7 +144,7 @@ function Row() {
                 />
               </div>
 
-              {index !== 9 && (
+              {index !== 100 && (
                 <>
                   <div className='mb-4'>
                     <label className="block text-sm font-medium mb-1">
