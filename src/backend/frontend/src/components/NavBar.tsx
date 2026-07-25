@@ -53,7 +53,7 @@ function NavBar() {
         <div className="flex-1 text-center">
           <a href="/">
             <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
-             Campeonato Apertura 2026
+             Campeonato Clausura 2026
             </h1>
           </a>
         </div>
